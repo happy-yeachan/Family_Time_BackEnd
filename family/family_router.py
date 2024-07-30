@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 
 from fastapi import APIRouter, Depends, status, HTTPException, Response, Request
-
+from jose import jwt, JWTError
 from family import family_crud, family_schema
 from user import user_crud, user_router, user_schema
 import random
@@ -13,9 +13,32 @@ app = APIRouter(
   prefix="/family"
 )
 
+def get_current_phone(request: Request, db: Session = Depends(get_db)):
+    token = request.cookies.get('access_token')
+    
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+
+    try:
+        if token is None:
+            raise credentials_exception
+
+        payload = jwt.decode(token, user_router.SECRET_KEY, algorithms=[user_router.ALGORITHM])
+        phone: str = payload.get("sub")
+        if phone is None:
+            raise credentials_exception
+
+    except JWTError:
+        raise credentials_exception
+    
+    return phone
 
 @app.post(path="/create")
-async def create_family(name: str, phone: str, db: Session = Depends(get_db)): 
+async def create_family(name: str,  db: Session = Depends(get_db), phone: user_schema.Current_User = Depends(get_current_phone)): 
     
     # 존재 여부 확인
     while(True):
