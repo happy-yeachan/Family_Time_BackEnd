@@ -6,7 +6,7 @@ models.Base.metadata.create_all(bind=engine)
 
 from user import user_router
 from family import family_router
-
+from f_photo import f_photo_router
 
 origins = [
     "localhost:3000",
@@ -23,6 +23,7 @@ app.add_middleware(
 )
 app.include_router(user_router.app, tags=["user"])
 app.include_router(family_router.app, tags=["family"])
+app.include_router(f_photo_router.app, tags=["f_photo"])
 
 
 
