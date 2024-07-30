@@ -1,14 +1,10 @@
-
 from sqlalchemy.orm import Session
 from database import get_db
 
 from fastapi import APIRouter, Depends, status, HTTPException, Response, Request, UploadFile
 from jose import jwt, JWTError
-from family import family_crud
-from user import user_router, user_schema, user_crud
-from f_photo import f_photo_schema, f_photo_crud
-import random
-import string
+from user import user_router, user_crud
+from f_photo import f_photo_crud
 
 app = APIRouter(
   prefix="/photo"
@@ -57,7 +53,7 @@ async def load_all(db: Session = Depends(get_db), user_data: dict = Depends(get_
 
         return {
             "status": "success",
-            "photos": [photo.file_path for photo in photos]  # 파일 경로 리스트 반환
+            "photos": [{photo.file, photo.photo_no} for photo in photos]  # 파일 경로 리스트 반환
         }
 
     except Exception as e:
@@ -74,7 +70,7 @@ async def load_today(db: Session = Depends(get_db), user_data: dict = Depends(ge
 
         return {
             "status": "success",
-            "photos": [photo.file_path for photo in photos]  # 파일 경로 리스트 반환
+            "photos": [{photo.file, photo.photo_no} for photo in photos] 
         }
 
     except Exception as e:
@@ -91,8 +87,37 @@ async def load_indi(user_name: str, db: Session = Depends(get_db), user_data: di
 
         return {
             "status": "success",
-            "photos": [photo.file_path for photo in photos]  # 파일 경로 리스트 반환
+            "photos": [{photo.file, photo.photo_no} for photo in photos] 
         }
 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    
+
+@app.post("/comments")
+async def create_comment(photo_no: str, comment: str, db: Session = Depends(get_db), user_data: dict = Depends(get_current)):
+    new_comment = f_photo_crud.add_comment(photo_no, user_data.user_name, comment, db)
+    return {
+        "status": "success",
+        "comment": {
+            "comment_id": new_comment.comment_id,
+            "user_name": new_comment.user_name,
+            "comment": new_comment.comment,
+            "regdate": new_comment.regdate
+        }
+    }
+
+@app.get("/comments/{photo_no}")
+async def get_comments(photo_no: str, db: Session = Depends(get_db)):
+    comments = f_photo_crud.load_comments(photo_no, db)
+    return {
+        "status": "success",
+        "comments": [
+            {
+                "comment_id": comment.comment_id,
+                "user_name": comment.user_name,
+                "comment": comment.comment,
+                "regdate": comment.regdate
+            } for comment in comments
+        ]
+    }
