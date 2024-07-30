@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, VARCHAR, DateTime
+from sqlalchemy import Column, Integer, VARCHAR, DateTime, ForeignKey
 from datetime import datetime
 
 from database import Base
@@ -12,5 +12,12 @@ class User(Base):
   birth= Column(VARCHAR(100), nullable=False, unique=True)
   hashed_pw=Column(VARCHAR(100), nullable=False)
   role=Column(VARCHAR(20), nullable=False, default='MEMBER')
-  status=Column(VARCHAR(1), nullable=False, default='1')
+  family_id = Column(Integer, ForeignKey('Families.id'), default="None") 
   regdate = Column(DateTime, nullable=False, default=datetime.now)
+
+
+class Family(Base):
+  __tablename__ = 'Families'
+    
+  id = Column(Integer, primary_key=True, autoincrement=True)
+  family_name = Column(VARCHAR(20), nullable=False)
