@@ -53,7 +53,7 @@ async def load_all(db: Session = Depends(get_db), user_data: dict = Depends(get_
 
         return {
             "status": "success",
-            "photos": [{photo.file, photo.photo_no} for photo in photos]  # 파일 경로 리스트 반환
+            "photos": [{"file": photo.file, "photo_no": photo.photo_no} for photo in photos]  # 파일 경로 리스트 반환
         }
 
     except Exception as e:
@@ -70,7 +70,7 @@ async def load_today(db: Session = Depends(get_db), user_data: dict = Depends(ge
 
         return {
             "status": "success",
-            "photos": [{photo.file, photo.photo_no} for photo in photos] 
+            "photos": [{"file": photo.file, "photo_no": photo.photo_no} for photo in photos] 
         }
 
     except Exception as e:
@@ -87,7 +87,7 @@ async def load_indi(user_name: str, db: Session = Depends(get_db), user_data: di
 
         return {
             "status": "success",
-            "photos": [{photo.file, photo.photo_no} for photo in photos] 
+            "photos": [{"file": photo.file, "photo_no": photo.photo_no} for photo in photos] 
         }
 
     except Exception as e:
