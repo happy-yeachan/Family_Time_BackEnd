@@ -35,7 +35,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
 
 def get_current_user(request: Request, db: Session = Depends(get_db)):
-    token = request.cookies.get('access_token')
+    token = request.headers.get('access_token')
     
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -91,7 +91,7 @@ async def login(response: Response, login_form: OAuth2PasswordRequestForm = Depe
     access_token = create_access_token(data={"sub": user.phone}, expires_delta=access_token_expires)
 
     # 쿠키에 저장
-    response.set_cookie(key="access_token", value=access_token, expires=access_token_expires, httponly=True, samesite="none", secure=True)
+    # response.set_cookie(key="access_token", value=access_token, expires=access_token_expires, httponly=True, samesite="none", secure=True)
 
     if not res:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid user or password")

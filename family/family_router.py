@@ -14,7 +14,7 @@ app = APIRouter(
 )
 
 def get_current_phone(request: Request, db: Session = Depends(get_db)):
-    token = request.cookies.get('access_token')
+    token = request.headers.get('access_token')
     
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
