@@ -4,21 +4,24 @@ import base64
 from fastapi import UploadFile
 from datetime import datetime
 from sqlalchemy import func
-# def get_family(id: str, db: Session):  
-#     return db.query(Family).filter(Family.id == id).first()
+from CLOVA_Sentiment.Sentiment import sentiment_post
 
 
 def upload_photo(file: UploadFile, comment: str, user_name: str, family_id: str, db: Session):
     # 파일 내용을 읽어서 Base64로 인코딩
     file_content = file.file.read()
     encoded_file = base64.b64encode(file_content).decode('utf-8')  # Base64로 인코딩하고 문자열로 변환
-
+    sentiment = sentiment_post(comment)
+    negative = sentiment['document']['confidence']['negative']
+    positive = sentiment['document']['confidence']['positive']
     # Family_Photo 모델 인스턴스 생성
     family_photo = Family_Photo(
         author = user_name,
         comment = comment,
         family_id = family_id,
-        file = encoded_file  # Base64 인코딩된 파일 데이터를 저장
+        file = encoded_file,  # Base64 인코딩된 파일 데이터를 저장
+        negative = negative,
+        positive = positive
     )
 
     # 데이터베이스에 저장
