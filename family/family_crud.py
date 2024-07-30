@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 
 from models import Family, User
-from family import family_schema
 
 
 def get_family(id: str, db: Session):  
@@ -18,4 +17,11 @@ def create_Family(random_string: str, name: str, db: Session, phone: str):
     user.family_id = random_string
     db.commit()
     return family
-        
+
+
+def join_Family(id: str, phone: str, db: Session):
+
+    user = db.query(User).filter(User.phone == phone).first()
+    user.family_id = id
+    db.commit()
+    return id
