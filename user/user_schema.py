@@ -39,3 +39,9 @@ class NewUserForm(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+class Current_User(BaseModel):
+    user_name: str
+    phone: str
+    birth: str
+    family_id: str
