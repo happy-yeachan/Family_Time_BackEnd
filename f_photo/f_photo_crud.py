@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import Family_Photo
+from models import Family_Photo, Family_Photo_comment
 import base64
 from fastapi import UploadFile
 from datetime import datetime
@@ -57,7 +57,19 @@ def load_indi_photo(family_id: str, user_name: str, db: Session):
     # 오늘 업로드된 사진 쿼리
     photos = db.query(Family_Photo).filter(
         Family_Photo.family_id == family_id,
-        func.date(Family_Photo.username) == user_name  # 오늘 날짜와 일치하는 사진 필터링
+        Family_Photo.author == user_name  # 오늘 날짜와 일치하는 사진 필터링
     ).all()
 
     return photos
+
+
+def add_comment(photo_no: str, user_name: str, comment: str, db: Session):
+    new_comment = Family_Photo_comment(photo_no=photo_no, user_name=user_name, comment=comment)
+    db.add(new_comment)
+    db.commit()
+    db.refresh(new_comment)
+    return new_comment
+
+def load_comments(photo_no: str, db: Session):
+    comments = db.query(Family_Photo_comment).filter(Family_Photo_comment.photo_no == photo_no).all()
+    return comments
