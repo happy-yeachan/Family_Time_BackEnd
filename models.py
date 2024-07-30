@@ -19,5 +19,5 @@ class User(Base):
 class Family(Base):
   __tablename__ = 'Families'
     
-  id = Column(Integer, primary_key=True, autoincrement=True)
+  id = Column(VARCHAR(20), primary_key=True)
   family_name = Column(VARCHAR(20), nullable=False)
