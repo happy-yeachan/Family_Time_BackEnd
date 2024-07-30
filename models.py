@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, VARCHAR, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, VARCHAR, DateTime, ForeignKey, Float
 from datetime import datetime
 
 from database import Base
@@ -31,3 +31,5 @@ class Family_Photo(Base):
   regdate = Column(DateTime, nullable=False, default=datetime.now)
   family_id = Column(VARCHAR(20), ForeignKey('Families.id'), default="None") 
   comment = Column(VARCHAR(20), nullable=True, default="None")
+  positive = Column(Float, default=0)
+  negative = Column(Float, default=0)
