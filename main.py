@@ -9,7 +9,7 @@ from family import family_router
 
 
 origins = [
-    "*",
+    "localhost:3000",
 ]
 
 
