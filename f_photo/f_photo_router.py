@@ -59,17 +59,23 @@ async def load_all( user_data: dict = Depends(get_current), db: Session = Depend
         
 @app.get(path="/today")
 async def load_today(user_data: dict = Depends(get_current), db: Session = Depends(get_db)):
+    try:
+        # 오늘 업로드된 사진 불러오기
+        photos = f_photo_crud.load_today_photo(user_data.family_id, db)
 
-    # 오늘 업로드된 사진 불러오기
-    photos = f_photo_crud.load_today_photo(user_data.family_id, db)
+        if not photos:
+            return  {
+            "status": "success",
+            "photos": [] 
+        }
 
-    if not photos:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No photos found for today")
+        return {
+            "status": "success",
+            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "author": photo.author, "regdata": photo.regdate} for photo in photos] 
+        }
 
-    return {
-        "status": "success",
-        "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "author": photo.author, "regdata": photo.regdate} for photo in photos] 
-    }
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
 @app.get(path="/indi")
