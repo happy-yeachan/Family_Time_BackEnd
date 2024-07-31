@@ -18,15 +18,18 @@ headers = {
 
 
 def call_clova(preset_text):
-    data = {
-        'messages': [{'role':'system',
+    sys_data = [{'role':'system',
             'content':'''
             - 가족 구성원들의 유저 데이터를 기반으로 정보를 제공한다
             - 유저 데이터는 채팅 기록도 포함한다.
             - 아래 질문과 답변 기록 기반하여 앞으로의 질문에 대답한다.
             - 네이버 지도를 통해 추천해줄 만한 장소도 알려주기도 한다.
             - 혹은 직접 솔루션을 제안하거나 상품을 추천해 주기도 한다.
-            '''}].extend(preset_text),
+            '''}]
+    sys_data.extend(preset_text)
+
+    data = {
+        'messages': sys_data,
         'topP': 0.6,
         'topK': 0,
         'maxTokens': 100,
