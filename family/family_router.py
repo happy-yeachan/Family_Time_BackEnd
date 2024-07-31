@@ -38,14 +38,14 @@ def get_current_phone(request: Request, db: Session = Depends(get_db)):
     return phone
 
 @app.post(path="/create")
-async def create_family(name: str,  db: Session = Depends(get_db), phone: user_schema.Current_User = Depends(get_current_phone)): 
+async def create_family(db: Session = Depends(get_db), phone: user_schema.Current_User = Depends(get_current_phone)): 
     
     # 존재 여부 확인
     while(True):
         characters = string.ascii_letters + string.digits
         random_string = ''.join(random.choice(characters) for _ in range(5))
         if not family_crud.get_family(random_string, db):
-            family_crud.create_Family(random_string, name, db, phone)
+            family_crud.create_Family(random_string, db, phone)
             break
 
 
