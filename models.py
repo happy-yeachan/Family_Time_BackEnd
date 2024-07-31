@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, VARCHAR, DateTime, ForeignKey, Float
+from sqlalchemy import Column, Integer, VARCHAR, DateTime, ForeignKey, Float, create_engine, or_
 from datetime import datetime
 from sqlalchemy.orm import relationship
 
@@ -22,7 +22,6 @@ class Family(Base):
   __tablename__ = 'Families'
     
   id = Column(VARCHAR(20), primary_key=True)
-  family_name = Column(VARCHAR(20), nullable=False)
 
 
 class Family_Photo(Base):
@@ -52,3 +51,12 @@ class Family_Photo_comment(Base):
     # 관계 설정 (옵션)
     photo = relationship("Family_Photo", back_populates="comments")
     user = relationship("User")
+
+class Chat_Log(Base):
+    __tablename__ = 'chat_log'
+
+    log_id = Column(Integer, primary_key=True, autoincrement=True)  # ID
+    role = Column(VARCHAR(20), nullable=False)  
+    content = Column(VARCHAR(255), nullable=False) 
+    family_id = Column(VARCHAR(20), ForeignKey('Families.id'), default="None") 
+
