@@ -68,7 +68,7 @@ async def load_today(user_data: dict = Depends(get_current), db: Session = Depen
 
         return {
             "status": "success",
-            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment} for photo in photos] 
+            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "author": photo.author} for photo in photos] 
         }
 
     except Exception as e:
