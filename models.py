@@ -7,10 +7,9 @@ from database import Base
 
 class User(Base):
   __tablename__ = "Users"
-  
-  user_no = Column(Integer, primary_key=True, autoincrement=True)
+
   user_name = Column(VARCHAR(10), nullable=False)
-  phone= Column(VARCHAR(100), nullable=False, unique=True)
+  phone= Column(VARCHAR(100), primary_key=True, nullable=False, unique=True)
   birth= Column(VARCHAR(100), nullable=False)
   hashed_pw=Column(VARCHAR(100), nullable=False)
   role=Column(VARCHAR(20), nullable=False, default='MEMBER')
