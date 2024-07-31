@@ -30,6 +30,14 @@ def upload_photo(file: UploadFile, comment: str, user_name: str, family_id: str,
 
     return family_photo  # 저장된 사진 정보 반환
 
+def load_photo(photo_no: str, db: Session):
+
+    photo = db.query(Family_Photo).filter(
+        Family_Photo.photo_no == photo_no
+    ).first()
+
+    return photo
+
 
 def load_today_photo(family_id: str, db: Session):
     # 오늘 날짜 구하기

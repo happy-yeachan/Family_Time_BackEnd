@@ -41,7 +41,12 @@ async def upload(file: UploadFile, comment: str,  db: Session = Depends(get_db),
     f_photo_crud.upload_photo(file, comment, user_data.user_name, user_data.family_id, db)
 
     return HTTPException(status_code=status.HTTP_200_OK, detail="upload successful")
-    
+
+@app.get(path="/{photo_no}")
+async def load_all(photo_no: str, db: Session = Depends(get_db), user_data: dict = Depends(get_current)):
+    photo = f_photo_crud.load_photo(photo_no, db)
+    return {"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "commet": photo.comment}
+
 @app.get(path="/all")
 async def load_all(db: Session = Depends(get_db), user_data: dict = Depends(get_current)):
     try:
