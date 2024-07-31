@@ -52,7 +52,7 @@ async def load_all( user_data: dict = Depends(get_current), db: Session = Depend
 
         return {
             "status": "success",
-            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment} for photo in photos]  # 파일 경로 리스트 반환
+            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "regdata": photo.regdate} for photo in photos]  # 파일 경로 리스트 반환
         }
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -68,7 +68,7 @@ async def load_today(user_data: dict = Depends(get_current), db: Session = Depen
 
         return {
             "status": "success",
-            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "author": photo.author} for photo in photos] 
+            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "author": photo.author, "regdata": photo.regdate} for photo in photos] 
         }
 
     except Exception as e:
@@ -86,7 +86,7 @@ async def load_indi(user_name: str, db: Session = Depends(get_db), user_data: di
 
         return {
             "status": "success",
-            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment} for photo in photos] 
+            "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "regdata": photo.regdate} for photo in photos] 
         }
 
     except Exception as e:
