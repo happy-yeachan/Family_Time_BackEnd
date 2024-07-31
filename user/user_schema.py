@@ -7,9 +7,10 @@ class NewUserForm(BaseModel):
   name: str
   phone: str
   birth: str
+  sex: str
   password: str
 
-  @validator('name', 'phone', 'password', 'birth')
+  @validator('name', 'phone', 'password', 'sex', 'birth')
   def check_empty(cls, v):
       if not v or v.isspace():
           raise HTTPException(status_code=422, detail="필수 항목을 입력해주세요.")

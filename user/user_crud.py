@@ -21,6 +21,7 @@ def create_user(new_user: NewUserForm, db: Session):
         user_name =new_user.name,
         phone=new_user.phone,
         birth=new_user.birth,
+        sex=new_user.sex,
         hashed_pw=pwd_context.hash(new_user.password)
     )
     db.add(user)
