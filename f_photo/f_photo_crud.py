@@ -53,7 +53,6 @@ def load_today_photo(family_id: str, db: Session):
 
 def load_all_photo(family_id: str, db: Session):
 
-    # 오늘 업로드된 사진 쿼리
     photos = db.query(Family_Photo).filter(
         Family_Photo.family_id == family_id # 오늘 날짜와 일치하는 사진 필터링
     ).all()
@@ -61,7 +60,6 @@ def load_all_photo(family_id: str, db: Session):
     return photos  # 오늘 업로드된 사진 리스트 반환
 
 def load_indi_photo(family_id: str, user_name: str, db: Session):
-    # 오늘 업로드된 사진 쿼리
     photos = db.query(Family_Photo).filter(
         Family_Photo.family_id == family_id,
         Family_Photo.author == user_name  # 오늘 날짜와 일치하는 사진 필터링

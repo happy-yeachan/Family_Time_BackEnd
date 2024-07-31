@@ -42,17 +42,11 @@ async def upload(file: UploadFile, comment: str,  db: Session = Depends(get_db),
 
     return HTTPException(status_code=status.HTTP_200_OK, detail="upload successful")
 
-@app.get(path="/{photo_no}")
-async def load_all(photo_no: str, db: Session = Depends(get_db)):
-    photo = f_photo_crud.load_photo(photo_no, db)
-    return {"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment, "commet": photo.comment}
-
 @app.get(path="/all")
-async def load_all(db: Session = Depends(get_db), user_data: dict = Depends(get_current)):
+async def load_all( user_data: dict = Depends(get_current), db: Session = Depends(get_db)):
     try:
         # 오늘 업로드된 사진 불러오기
         photos = f_photo_crud.load_all_photo(user_data.family_id, db)
-
         if not photos:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No photos found for today")
 
@@ -60,12 +54,11 @@ async def load_all(db: Session = Depends(get_db), user_data: dict = Depends(get_
             "status": "success",
             "photos": [{"file": photo.file, "photo_no": photo.photo_no, "sentiment": photo.sentiment} for photo in photos]  # 파일 경로 리스트 반환
         }
-
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
-    
+        
 @app.get(path="/today")
-async def load_today(db: Session = Depends(get_db), user_data: dict = Depends(get_current)):
+async def load_today(user_data: dict = Depends(get_current), db: Session = Depends(get_db)):
     try:
         # 오늘 업로드된 사진 불러오기
         photos = f_photo_crud.load_today_photo(user_data.family_id, db)
@@ -80,6 +73,7 @@ async def load_today(db: Session = Depends(get_db), user_data: dict = Depends(ge
 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
 
 @app.get(path="/indi")
 async def load_indi(user_name: str, db: Session = Depends(get_db), user_data: dict = Depends(get_current)):
@@ -98,6 +92,10 @@ async def load_indi(user_name: str, db: Session = Depends(get_db), user_data: di
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
     
+@app.get(path="/{photo_no}")
+async def load(photo_no: str, db: Session = Depends(get_db)):
+    photo = f_photo_crud.load_photo(photo_no, db)
+    return photo
 
 @app.post("/comments")
 async def create_comment(photo_no: str, comment: str, db: Session = Depends(get_db), user_data: dict = Depends(get_current)):
