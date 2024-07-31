@@ -67,3 +67,7 @@ async def join(id: str, db: Session = Depends(get_db), phone: user_schema.Curren
     family_crud.join_Family(id, phone, db)
 
     return HTTPException(status_code=status.HTTP_200_OK, detail="join successful")
+
+@app.get("/")
+async def read_users_me(current_user: user_schema.Current_User = Depends(user_router.get_current_user), db: Session = Depends(get_db)):
+    return family_crud.get_cnt(current_user.family_id, db)

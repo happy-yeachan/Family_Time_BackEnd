@@ -31,3 +31,6 @@ def join_Family(id: str, phone: str, db: Session):
     content = f"{user.user_name}에 대한 간단한 정보: \n{user}"
     log_crud.create_log(user.family_id,content, db)
     return id
+
+def get_cnt(family_id: str, db: Session):  
+    return db.query(User).filter(User.family_id == family_id).count()
