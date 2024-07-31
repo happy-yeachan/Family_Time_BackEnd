@@ -11,8 +11,8 @@ class User(Base):
   user_name = Column(VARCHAR(10), nullable=False)
   phone= Column(VARCHAR(100), primary_key=True, nullable=False, unique=True)
   birth= Column(VARCHAR(100), nullable=False)
+  sex=Column(VARCHAR(20), nullable=False)
   hashed_pw=Column(VARCHAR(100), nullable=False)
-  role=Column(VARCHAR(20), nullable=False, default='MEMBER')
   family_id = Column(VARCHAR(20), ForeignKey('Families.id'), default="None") 
   regdate = Column(DateTime, nullable=False, default=datetime.now)
 
