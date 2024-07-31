@@ -16,6 +16,5 @@ def create_log(family_id: str, content: str, db: Session):
     db.refresh(log)
     learned_data = db.query(Chat_Log).filter(
         Chat_Log.family_id == family_id,
-        Chat_Log.family_id == "top"
     ).all()
     return learned_data
