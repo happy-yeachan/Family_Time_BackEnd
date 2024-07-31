@@ -49,7 +49,7 @@ async def create_family(db: Session = Depends(get_db), phone: user_schema.Curren
             break
 
 
-    return HTTPException(status_code=status.HTTP_200_OK, detail="create_family successful")
+    return random_string
 
 
 
