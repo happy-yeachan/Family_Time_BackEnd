@@ -32,8 +32,7 @@ class Family_Photo(Base):
     regdate = Column(DateTime, nullable=False, default=datetime.now)
     family_id = Column(VARCHAR(20), ForeignKey('Families.id'), default="None") 
     comment = Column(VARCHAR(20), nullable=True, default="None")
-    positive = Column(Float, default=0)
-    negative = Column(Float, default=0)
+    sentiment = Column(VARCHAR(20), nullable=False)
 
     # 댓글 관계 추가
     comments = relationship("Family_Photo_comment", back_populates="photo")
