@@ -37,7 +37,7 @@ def get_current(request: Request, db: Session = Depends(get_db)):
 
 @app.post(path="/chat")
 async def upload(content: str,  db: Session = Depends(get_db), user_data: dict = Depends(get_current)): 
-    learned_datas = log_crud.create_log(user_data.family_id,f"{user_data.user_name}: {content}", db)
+    learned_datas = log_crud.create_log(user_data.family_id,f"{content}", db)
     log = [{"role": learned_data.role, "content": learned_data.content} for learned_data in learned_datas]
     return chatbot.call_clova(log)
 
